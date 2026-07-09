@@ -1,0 +1,21 @@
+{
+  "title": "Linux 系統除錯實戰：從入門到破案",
+  "description": "7 個階段，學習如何處理 Linux 服務異常、權限錯誤、資源耗盡與資安排查。",
+  "details": {
+    "steps": [
+      { "title": "Stage 1｜它還活著嗎？", "text": "Linux_1.md" },
+      { "title": "Stage 2｜它的遺言說什麼？", "text": "Linux_2.md" },
+      { "title": "Stage 3｜路徑一：設定錯", "text": "Linux_3.md" },
+      { "title": "Stage 4｜路徑二：權限錯", "text": "Linux_4.md" },
+      { "title": "Stage 5｜路徑三：資源不足", "text": "Linux_5.md" },
+      { "title": "Stage 6｜追查真相：是誰在敲門？", "text": "Linux_6.md" },
+      { "title": "Stage 7｜收尾：版本就是攻擊面", "text": "Linux_7.md" }
+    ]
+  },
+  "environment": {
+    "uilayout": "terminal"
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}
