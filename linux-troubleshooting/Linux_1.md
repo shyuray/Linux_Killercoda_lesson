@@ -81,6 +81,10 @@
 
 查東西有先後：先問範圍最大的，再逐步縮小到單一服務。這個由大到小的順序，就是分診本身。
 
+> 如果你跳過了暖身，先執行這行確認環境佈置完成：
+>
+> `test -f /tmp/scenario-ready && echo 就緒 || echo "還在準備，請稍候"`{{execute}}
+
 **第一步：先掃全機，看有沒有服務出狀況。**
 
 `systemctl --failed`{{execute}}
@@ -97,7 +101,7 @@
 
 `curl localhost`{{execute}}
 
-*→ 應該出現 `Connection refused` 。*
+*→ 它會告訴你連不上。訊息可能是 `Connection refused` ，也可能是 `Failed to connect to localhost port 80` 。兩句話的意思一樣。*
 
 **第四步：直接翻程式清單，確認它在不在。**
 
@@ -126,9 +130,11 @@
 | 你看到 | 這句話的意思 |
 | :--- | :--- |
 | **一大段 HTML** | 網站有回應，服務正常 |
-| **Connection refused** | 連線被拒絕：沒有任何程式在那個位置接收請求 |
+| **Connection refused**<br>或 **Failed to connect to ... port 80** | 連不上：沒有任何程式在那個位置接收請求 |
 
-兩邊的答案是兜得起來的。`status` 說 failed，`curl` 說連線被拒絕——兩個指令從不同角度指向同一件事。這不是誤判，服務確實沒在執行。
+兩邊的答案是兜得起來的。`status` 說 failed，`curl` 說連不上——兩個指令從不同角度指向同一件事。這不是誤判，服務確實沒在執行。
+
+（curl 的版本不同，措辭會不一樣。你要認的是「連不上」這件事，不是那句英文的字面。）
 
 ---
 <br>
