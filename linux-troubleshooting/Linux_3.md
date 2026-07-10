@@ -72,7 +72,7 @@
 
 **第一步：備份。這一步不能跳。**
 
-`sudo cp /etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/default.bak`{{execute}}
+`sudo cp /etc/nginx/sites-enabled/default /root/default.bak`{{execute}}
 
 *→ 沒有任何輸出，就是成功了。*
 
