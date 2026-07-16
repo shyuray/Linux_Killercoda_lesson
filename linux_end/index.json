@@ -1,0 +1,24 @@
+{
+  "title": "Linux 系統除錯實戰（二）：連不到與磁碟",
+  "description": "接續上一階段。把分診樹上剩下的兩格填起來：明明服務在跑卻連不到，以及磁碟還有空間卻寫不進去。",
+  "difficulty": "beginner",
+  "time": "90 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md",
+      "background": "setup.sh"
+    },
+    "steps": [
+      { "title": "Stage 1｜port 被佔用", "text": "Linux_1.md" },
+      { "title": "Stage 2｜服務在跑，但只有自己連得到", "text": "Linux_2.md" },
+      { "title": "Stage 3｜防火牆", "text": "Linux_3.md" },
+      { "title": "Stage 4｜這台機器連不出去", "text": "Linux_4.md" },
+      { "title": "Stage 5｜磁碟怎麼接到檔案樹上", "text": "Linux_5.md" },
+      { "title": "Stage 6｜還有空間，卻寫不進去", "text": "Linux_6.md" },
+      { "title": "Stage 7｜綜合診斷", "text": "Linux_7.md" }
+    ],
+    "finish": { "text": "finish.md" }
+  },
+  "backend": { "imageid": "ubuntu" },
+  "environment": { "uilayout": "terminal", "showdashboard": false }
+}
