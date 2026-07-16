@@ -45,7 +45,7 @@ nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
 | 你想知道 | 打這個 |
 | :--- | :--- |
 | 服務為什麼起不來？ | `journalctl -u nginx -n 10` |
-| 誰註冊了 port 80？ | `sudo ss -tlnp \| grep :80` |
+| 誰註冊了 port 80？ | `sudo ss -tlnp sport = :80` |
 | 這台機器上所有被佔用的 port | `sudo ss -tlnp` |
 | 結束一個程式 | `kill <PID>` |
 
@@ -57,33 +57,51 @@ nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
 
 **第一步：確認狀態。**
 
-`systemctl status nginx`{{execute}}
+`systemctl status nginx --no-pager`{{execute}}
 
-*→ failed。按 `q` 離開。*
+*→ failed。*
 
 **第二步：讀 log，看它說什麼。**
 
-`journalctl -u nginx -n 10`{{execute}}
+`journalctl -u nginx -n 10 --no-pager`{{execute}}
 
 *→ 找 `Address already in use` 那一句。注意它有沒有告訴你是誰佔的。*
 
 **第三步：去問核心，誰註冊了 port 80。**
 
+先看一個錯誤示範。很多人會這樣打：
+
 `sudo ss -tlnp | grep :80`{{execute}}
 
+*→ **它抓出兩行。** 一行是 `0.0.0.0:80`，另一行是 `127.0.0.1:8080`。*
+
+為什麼？因為 `grep` 是純文字比對，而 **`:8080` 這四個字元裡面，就含有 `:80`**。
+
+這裡有兩個 python3、兩個長得很像的 PID。**你如果沒停下來問「為什麼是兩行？我要的不是只有一個 port 嗎？」，就會挑錯一個殺掉。**
+
+正確的做法是用 `ss` 自己的過濾器，而不是拿文字去比對：
+
+`sudo ss -tlnp sport = :80`{{execute}}
+
+*→ 這次只有一行。`sport = :80` 是「來源 port 等於 80」，它比對的是數字，不是文字。*
 *→ 行尾的 `users:(("程式名",pid=數字,fd=數字))` 就是答案。*
 
 **第四步：結束它。把上一步查到的 PID 填進去。**
 
 `kill <PID>`{{copy}}
 
+`sudo ss -tlnp sport = :80`{{execute}}
+
+*→ **沒有輸出了。** port 80 現在沒有任何程式註冊，nginx 有位子可以用。*
+*→ 如果還有輸出，代表你殺錯了。回去看 PID。*
+
 **第五步：啟動 nginx，照上一階段的順序確認。**
 
 `sudo systemctl start nginx`{{execute}}
 
-`systemctl status nginx`{{execute}}
+`systemctl status nginx --no-pager`{{execute}}
 
-`sudo ss -tlnp | grep :80`{{execute}}
+`sudo ss -tlnp sport = :80`{{execute}}
 
 *→ 最後一行要看到 `users:(("nginx",pid=...))`。port 80 現在註冊給 nginx 了。*
 
@@ -134,21 +152,29 @@ LISTEN  0  511  0.0.0.0:80  0.0.0.0:*  users:(("nginx",pid=2416,fd=5))
 
 查得到那個程式在跑，但**查不到它佔用哪個 port**。`ps` 看的是程序，`ss` 看的是網路。要回答「誰佔了 80」，只有 `ss`。
 
+**「`ss | grep :80` 跟 `ss sport = :80` 有差嗎？」**
+
+差很大。`grep` 是文字比對，`:8080`、`:8000`、`:801` 全部都含有 `:80` 這幾個字元，它們都會被抓出來。**你會拿到一份混著別的 port 的清單，然後從裡面挑一個殺掉。**
+
+`sport = :80` 是 `ss` 自己的過濾器，它比對的是 port 的數值。**要精確，就用工具自己的過濾器，不要事後拿 grep 去撈。**
+
 ---
 <br>
 
 ## 觀念確認（小任務）
 <br>
 
-服務啟動失敗，log 說 `Address already in use`。你的下一步是：
+你想查誰佔用了 port 80，打了 `sudo ss -tlnp | grep :80` ，結果跑出兩行，兩個都是 python3。你應該：
 
-- A. 檢查設定檔有沒有寫錯
-- B. 用 `sudo ss -tlnp` 查是哪個程式佔用了那個 port
-- C. 重開機
+- A. 挑第一行那個 PID 殺掉
+- B. 停下來想「為什麼是兩行」，換一個更精確的查法
+- C. 兩個都殺掉
 
-**建議答案是 B。** 這個錯誤已經明確告訴你原因是 port 被佔用，設定檔沒有問題，查它是浪費時間。而錯誤訊息不會告訴你是誰佔的，你得自己查。
+**建議答案是 B。** 你要查的是一個 port，答案不可能有兩行。
 
-（重開機確實能解決——如果那個佔用的程式不會跟著開機啟動的話。但你不會知道原因，下次還會發生。）
+多出來的那一行是 `:8080`——`grep` 把它一起抓出來了，因為 `:8080` 裡面含有 `:80` 這幾個字元。**改用 `sudo ss -tlnp sport = :80`，它比對數值不比對文字。**
+
+A 會讓你殺掉一個無辜的服務，而且你不會發現，因為 nginx 依然起不來，你會繼續往下查別的地方。**這種錯誤最貴：它不報錯，只是讓你走錯路。**
 
 ---
 

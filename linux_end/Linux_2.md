@@ -51,7 +51,7 @@
 
 | 你想知道 | 打這個 |
 | :--- | :--- |
-| 這個服務註冊在哪個位址？ | `sudo ss -tlnp \| grep :8080` |
+| 這個服務註冊在哪個位址？ | `sudo ss -tlnp sport = :8080` |
 | 這台機器的 IP 是多少？ | `ip a` |
 | 從本機連 | `curl localhost:8080` |
 | 用真實 IP 連（等於從網路上連） | `curl <IP>:8080` |
@@ -65,9 +65,9 @@
 
 **第一步：確認它真的在跑。**
 
-`systemctl status report-api`{{execute}}
+`systemctl status report-api --no-pager`{{execute}}
 
-*→ active (running)。服務本身沒問題。按 `q` 離開。*
+*→ active (running)。服務本身沒問題。*
 
 **第二步：從本機連。**
 
@@ -90,13 +90,13 @@
 
 **第五步：去問核心，它到底註冊在哪個位址。**
 
-`sudo ss -tlnp | grep :8080`{{execute}}
+`sudo ss -tlnp sport = :8080`{{execute}}
 
 *→ 答案就在 Local Address 那一欄。*
 
 **第六步：對照 nginx 的，看正常的長什麼樣。**
 
-`sudo ss -tlnp | grep :80`{{execute}}
+`sudo ss -tlnp sport = :80`{{execute}}
 
 *→ 兩個服務，左邊那一欄不一樣。*
 
@@ -145,7 +145,7 @@ LISTEN  0  511    0.0.0.0:80    ...  users:(("nginx",...))     ← nginx
 
 驗證：
 
-`sudo ss -tlnp | grep :8080`{{execute}}
+`sudo ss -tlnp sport = :8080`{{execute}}
 
 `curl $(hostname -I | awk '{print $1}'):8080`{{execute}}
 

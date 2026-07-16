@@ -83,13 +83,15 @@
 
 `nslookup google.com`{{execute}}
 
-*→ 注意 `Server:` 那一行。它是 `127.0.0.53` 之類的位址嗎？*
+*→ 注意 `Server:` 那一行。**記下那個位址，下一步要用。***
 
-**第五步：那個 `127.0.0.x` 是本機。所以真正的 DNS 是誰？**
+**第五步：看這台機器實際設定的 DNS。**
 
 `resolvectl status`{{execute}}
 
-*→ 找 `Current DNS Server:` 那一行。*
+*→ 找兩樣東西：`resolv.conf mode:` 和 `DNS Servers:`。*
+
+**這兩步的答案可能一致，也可能不一致。** 為什麼不一致，下面解釋。
 
 **第六步：封包要往哪送。**
 
@@ -109,31 +111,33 @@
 ## 看懂結果
 <br>
 
-### DNS 為什麼是 `127.0.0.53`
+### `nslookup` 說的 Server，可能不是真正的 DNS
 
-`127.0.0.x` 是 loopback，代表那台 DNS server **就在你自己機器上**。它是 `systemd-resolved` 這個程式：
+現在的 Ubuntu 有一個叫 `systemd-resolved` 的程式，它在本機開了一個 DNS 窗口。你可以看到它：
 
-`sudo ss -tlnp | grep :53`{{execute}}
+`sudo ss -tlnp sport = :53`{{execute}}
 
-它自己不知道 google.com 的 IP。它收到查詢之後，**再轉發給真正的外部 DNS server**。`resolvectl status` 裡的 `Current DNS Server` 才是那一台。
+*→ 它註冊在 `127.0.0.53` 這個位址上。*
 
-完整的過程：
+它自己不知道 google.com 的 IP。**它只是一個中間人**：收到查詢之後，轉發給真正的外部 DNS server，拿到答案再回給你。中間這一層的用途是**快取**——同一個名稱問第二次，它直接回答，不用再往外問。
 
-```text
-curl google.com
-   │
-   ▼ 查詢送到 127.0.0.53（本機的 systemd-resolved）
-   │
-   ▼ 它轉發給外部 DNS server
-   │
-   ▼ 拿回 142.250.198.78
-   │
-   ▼ curl 帶著這個 IP 發起連線
-```
+但你的查詢會不會經過它，**取決於 `/etc/resolv.conf` 指向哪裡**。而 `resolvectl status` 裡的 `resolv.conf mode` 就是在講這件事：
 
-多這一層的用途是**快取**：同一個名稱問第二次，systemd-resolved 直接回答，不用再往外問。
+| resolv.conf mode | 意思 | `nslookup` 的 Server 會是 |
+| :--- | :--- | :--- |
+| **stub** | 查詢先送到本機的 systemd-resolved，再由它轉發 | `127.0.0.53` |
+| **uplink** | 查詢直接送到外部 DNS，不經過中間人 | 外部 DNS 的 IP（例如 `8.8.8.8`） |
 
-> **這一層造成一個實務落差。** 舊教材會叫你改 `/etc/resolv.conf` 來換 DNS。但那個檔案現在是 systemd-resolved 自動產生的，**你改了會被覆蓋掉**。`resolvectl status` 裡那行 `resolv.conf mode: stub` 就是在講這件事。要真的改 DNS，得改 netplan。
+**兩種都正常，只是設定不同。** 你剛才 `nslookup` 看到的 Server，對照 `resolvectl status` 的 mode，應該就對得起來。
+
+排查時的意義：
+
+- 看到 `127.0.0.53` → 中間有一層本機的轉發程式。**它壞了，或它的上游壞了，症狀一樣。** 你要用 `resolvectl status` 才看得到上游是誰。
+- 看到外部 IP → 沒有中間層，`nslookup` 顯示的就是真正在回答的那一台。
+
+> **一個實務落差要注意。** 舊教材會叫你改 `/etc/resolv.conf` 來換 DNS。
+>
+> 但那個檔案現在是自動產生的，**你改了會被覆蓋掉**。要真的改 DNS，得改 netplan 或 resolved 的設定。
 
 ### `ip r` 每一行在說什麼
 
