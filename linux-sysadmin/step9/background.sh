@@ -18,3 +18,5 @@ if [ ! -f /var/log/app/access.log ] || [ "$(stat -c%s /var/log/app/access.log)" 
   LINE='2026-07-23 00:00:01 INFO  request from 10.0.1.24 GET /orders 200'
   for i in $(seq 1 120000); do echo "$LINE"; done > /var/log/app/access.log
 fi
+
+exit 0

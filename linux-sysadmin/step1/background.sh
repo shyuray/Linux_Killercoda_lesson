@@ -11,3 +11,5 @@ chmod 755 /srv/app/bin/start.sh
 touch -d "8 months ago" /srv/app/bin/start.sh
 touch -d "3 months ago" /srv/app/config/app.conf 2>/dev/null
 touch -d "2 days ago"   /srv/app/data/orders.csv
+
+exit 0

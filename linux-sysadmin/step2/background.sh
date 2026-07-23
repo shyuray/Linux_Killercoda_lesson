@@ -16,3 +16,5 @@ db_port = 3306
 EOF
 
 echo "db_host = 192.168.10.88" > /srv/app/config/backup/db.conf.bak
+
+exit 0

@@ -204,3 +204,5 @@ fi
 
 touch /tmp/setup-done
 echo "環境建立完成"
+
+exit 0

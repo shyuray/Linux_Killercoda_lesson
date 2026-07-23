@@ -6,3 +6,5 @@ systemctl disable order-web >/dev/null 2>&1
 
 mkdir -p /srv/app/www
 [ -f /srv/app/www/index.html ] || echo "<h1>訂單查詢系統</h1>" > /srv/app/www/index.html
+
+exit 0

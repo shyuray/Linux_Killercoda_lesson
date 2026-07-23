@@ -11,3 +11,5 @@ chmod 750 /srv/share/reports
 
 [ -f /srv/share/sales/note.txt ] || echo "業務部共用區" > /srv/share/sales/note.txt
 chmod 777 /srv/share/sales
+
+exit 0

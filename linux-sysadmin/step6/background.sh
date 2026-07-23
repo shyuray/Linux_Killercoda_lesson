@@ -15,3 +15,5 @@ fi
 rm -f /opt/scripts/gen_report.sh
 systemctl daemon-reload  >/dev/null 2>&1
 systemctl start report-job >/dev/null 2>&1
+
+exit 0

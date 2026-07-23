@@ -8,3 +8,5 @@ echo 'wchen:OldPass2024' | chpasswd >/dev/null 2>&1
 
 id app-report >/dev/null 2>&1 || \
   useradd -r -s /bin/false -d /srv/app -c "report service" app-report
+
+exit 0
