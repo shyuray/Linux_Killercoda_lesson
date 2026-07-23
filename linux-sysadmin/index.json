@@ -1,0 +1,74 @@
+{
+  "title": "Linux 系統管理：從接手一台伺服器開始",
+  "description": "十個章節，走完一台公司伺服器從認識到排障的完整流程。",
+  "difficulty": "beginner",
+  "time": "300 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md",
+      "background": "setup.sh"
+    },
+    "steps": [
+      {
+        "title": "01｜我在哪裡，這裡有什麼",
+        "text": "step1/step1.md",
+        "background": "step1/background.sh"
+      },
+      {
+        "title": "02｜從一堆檔案裡找到目標",
+        "text": "step2/step2.md",
+        "background": "step2/background.sh"
+      },
+      {
+        "title": "03｜檔案在，但打不開",
+        "text": "step3/step3.md",
+        "background": "step3/background.sh"
+      },
+      {
+        "title": "04｜誰能登入這台機器",
+        "text": "step4/step4.md",
+        "background": "step4/background.sh"
+      },
+      {
+        "title": "05｜系統打不開了",
+        "text": "step5/step5.md",
+        "background": "step5/background.sh"
+      },
+      {
+        "title": "06｜昨晚發生了什麼",
+        "text": "step6/step6.md",
+        "background": "step6/background.sh"
+      },
+      {
+        "title": "07｜我們中招了嗎",
+        "text": "step7/step7.md",
+        "background": "step7/background.sh"
+      },
+      {
+        "title": "08｜兩個程式要用同一個連接埠",
+        "text": "step8/step8.md",
+        "background": "step8/background.sh"
+      },
+      {
+        "title": "09｜檔案寫不進去了",
+        "text": "step9/step9.md",
+        "background": "step9/background.sh"
+      },
+      {
+        "title": "10｜只有症狀，沒有線索",
+        "text": "step10/step10.md",
+        "background": "step10/background.sh"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  },
+  "environment": {
+    "uilayout": "terminal",
+    "showdashboard": false
+  }
+}
