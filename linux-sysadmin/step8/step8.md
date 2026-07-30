@@ -73,11 +73,7 @@
 <br>
 
 ## 判讀輸出
-<br>
 
-
-
-<br>
 
 ### 1. `ss -tulpn` 你只要看兩欄 ( Address 跟 Process )
 
