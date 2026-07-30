@@ -23,6 +23,9 @@
 ## 實際排查時的順序
 <br>
 
+![完整分診樹](pic/triage-tree-full.png)
+<br>
+
 ```text
            有人說「系統打不開」
                     │
