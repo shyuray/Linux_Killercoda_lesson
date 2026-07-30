@@ -19,7 +19,7 @@
 `ls -l` 最前面那十個字元，就是這個檔案的通行規則。
 
 ```text
-![權限的十個字元怎麼拆](pic/permission-bits.png)
+![權限的十個字元怎麼拆](../pic/permission-bits.png)
 
      -   rw-   r--   r--
      │    │     │     │

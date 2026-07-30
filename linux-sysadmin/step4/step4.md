@@ -19,7 +19,7 @@
 所有帳號都記在 `/etc/passwd` 這個檔案裡，一行一個帳號，用冒號分成七欄。
 
 ```text
-![/etc/passwd 的七個欄位](pic/passwd-fields.png)
+![/etc/passwd 的七個欄位](../pic/passwd-fields.png)
 
   wchen : x : 1002 : 1005 : Wu Chen : /home/wchen : /bin/bash
     │     │    │      │       │           │            │

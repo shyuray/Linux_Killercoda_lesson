@@ -19,7 +19,7 @@
 一直在背景執行、隨時等著處理請求的程式，叫做**服務**。這台機器上所有服務的啟停，由 `systemd` 統一管理，你透過 `systemctl` 對它下令。
 
 ```text
-![透過 systemd 管理服務](pic/systemd-services.png)
+![透過 systemd 管理服務](../pic/systemd-services.png)
 
                               ┌──▶  order-web   訂單查詢系統
                               │
@@ -94,7 +94,7 @@
 ## 判讀輸出
 <br>
 
-![服務的三種狀態](pic/service-states.png)
+![服務的三種狀態](../pic/service-states.png)
 <br>
 
 ### 1. `systemctl status` 你只要看兩行
