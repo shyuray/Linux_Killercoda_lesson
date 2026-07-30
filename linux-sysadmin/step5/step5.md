@@ -18,15 +18,9 @@
 
 一直在背景執行、隨時等著處理請求的程式，叫做**服務**。這台機器上所有服務的啟停，由 `systemd` 統一管理，你透過 `systemctl` 對它下令。
 
-```text
+
 ![透過 systemd 管理服務](../pic/systemd-services.png)
 
-                              ┌──▶  order-web   訂單查詢系統
-                              │
-   你  ──systemctl──▶  systemd ──┼──▶  ssh         遠端連線
-                              │
-                              └──▶  cron        排程工作
-```
 
 服務在任何時候只會是這三種狀態的其中一種：
 
@@ -95,6 +89,7 @@
 <br>
 
 ![服務的三種狀態](../pic/service-states.png)
+
 <br>
 
 ### 1. `systemctl status` 你只要看兩行
